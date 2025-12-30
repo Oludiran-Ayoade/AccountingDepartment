@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 40% 20%;
+    --card: 210 40% 98%;
+    --card-foreground: 220 40% 20%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 220 40% 20%;
+    --muted: 210 30% 92%;
+    --muted-foreground: 220 20% 50%;
+    --accent: 210 100% 95%;
+    --accent-foreground: 220 40% 20%;
+    --border: 214 32% 91%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 15%;
+    --card-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 20%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 18%;
+    --accent-foreground: 210 40% 98%;
+    --border: 217 33% 20%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.01em;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-light tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Beautiful Toast Notifications */
+.Toastify__toast {
+  font-family: inherit;
+  border-radius: 1rem !important;
+  padding: 1rem 1.25rem !important;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid hsl(var(--border)) !important;
+  min-height: 64px !important;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, hsl(142 76% 36% / 0.95) 0%, hsl(142 76% 36% / 0.85) 100%) !important;
+  color: white !important;
+  border-color: hsl(142 76% 46%) !important;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, hsl(0 84% 60% / 0.95) 0%, hsl(0 84% 60% / 0.85) 100%) !important;
+  color: white !important;
+  border-color: hsl(0 84% 70%) !important;
+}
+
+.Toastify__toast--warning {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.95) 0%, hsl(var(--primary) / 0.85) 100%) !important;
+  color: white !important;
+  border-color: hsl(var(--primary)) !important;
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, hsl(199 89% 48% / 0.95) 0%, hsl(199 89% 48% / 0.85) 100%) !important;
+  color: white !important;
+  border-color: hsl(199 89% 58%) !important;
+}
+
+.Toastify__progress-bar {
+  height: 4px !important;
+  border-radius: 0 0 1rem 1rem !important;
+}
+
+.Toastify__progress-bar--success {
+  background: hsl(142 76% 56%) !important;
+}
+
+.Toastify__progress-bar--error {
+  background: hsl(0 84% 70%) !important;
+}
+
+.Toastify__progress-bar--warning {
+  background: hsl(var(--primary)) !important;
+}
+
+.Toastify__progress-bar--info {
+  background: hsl(199 89% 58%) !important;
+}
+
+.Toastify__close-button {
+  color: white !important;
+  opacity: 0.8 !important;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1 !important;
+}
+
+.Toastify__toast-body {
+  padding: 0 !important;
+  font-weight: 500 !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Elegant scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary text-primary-foreground;
+}

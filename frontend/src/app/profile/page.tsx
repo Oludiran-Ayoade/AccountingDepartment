@@ -35,30 +35,26 @@ export default function ProfilePage() {
       return;
     }
 
-    // Mock data - replace with API calls
-    setDownloadHistory([
-      {
-        id: '1',
-        noteTitle: 'Financial Accounting Principles',
-        course: 'ACC 201',
-        downloadDate: '2024-01-15',
-      },
-      {
-        id: '2',
-        noteTitle: 'Cost Accounting Methods',
-        course: 'ACC 301',
-        downloadDate: '2024-01-20',
-      },
-    ]);
-
-    setVoteHistory([
-      {
-        id: '1',
-        electionTitle: 'Class Representative Elections 2024',
-        position: 'Secretary',
-        voteDate: '2024-01-10',
-      },
-    ]);
+    // Fetch real download and vote history from API
+    const fetchHistory = async () => {
+      if (!user) return;
+      
+      try {
+        // Fetch download history
+        const downloadsResponse = await api.get(`/note-downloads/user/${user.id}`);
+        setDownloadHistory(downloadsResponse.data || []);
+        
+        // Fetch vote history
+        const votesResponse = await api.get(`/votes/user/${user.id}`);
+        setVoteHistory(votesResponse.data || []);
+      } catch (error) {
+        console.error('Failed to fetch history:', error);
+        setDownloadHistory([]);
+        setVoteHistory([]);
+      }
+    };
+    
+    fetchHistory();
   }, [isAuthenticated, router]);
 
   if (!isAuthenticated || !user) {

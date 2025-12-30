@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"net/http"
+	"strings"
 	"time"
 
 	"bowen-accounting-backend/config"
@@ -41,17 +42,42 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Determine role based on matric number
+	// Check if "admin" is in the full name (case-insensitive)
 	role := "student"
-	if len(req.MatricNumber) >= 5 && req.MatricNumber[:5] == "admin" {
-		role = "admin"
+	firstName := req.FirstName
+	lastName := req.LastName
+
+	// Check and remove "admin" from first name
+	if len(firstName) >= 5 {
+		firstNameLower := strings.ToLower(firstName)
+		if strings.Contains(firstNameLower, "admin") {
+			role = "admin"
+			// Remove "admin" from the name (case-insensitive)
+			firstName = strings.ReplaceAll(firstName, "admin", "")
+			firstName = strings.ReplaceAll(firstName, "Admin", "")
+			firstName = strings.ReplaceAll(firstName, "ADMIN", "")
+			firstName = strings.TrimSpace(firstName)
+		}
+	}
+
+	// Check and remove "admin" from last name
+	if len(lastName) >= 5 {
+		lastNameLower := strings.ToLower(lastName)
+		if strings.Contains(lastNameLower, "admin") {
+			role = "admin"
+			// Remove "admin" from the name (case-insensitive)
+			lastName = strings.ReplaceAll(lastName, "admin", "")
+			lastName = strings.ReplaceAll(lastName, "Admin", "")
+			lastName = strings.ReplaceAll(lastName, "ADMIN", "")
+			lastName = strings.TrimSpace(lastName)
+		}
 	}
 
 	// Create user
 	user := models.User{
 		ID:           primitive.NewObjectID(),
-		FirstName:    req.FirstName,
-		LastName:     req.LastName,
+		FirstName:    firstName,
+		LastName:     lastName,
 		Email:        req.Email,
 		MatricNumber: req.MatricNumber,
 		PhoneNumber:  req.PhoneNumber,

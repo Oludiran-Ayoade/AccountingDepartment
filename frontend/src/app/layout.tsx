@@ -35,8 +35,9 @@ export default function RootLayout({
       <head>
         <title>Bowen Accounting Department - Notes & Elections</title>
         <meta name="description" content="Bowen University Accounting Department portal for notes sharing and democratic elections" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/icon.png" />
+        <link rel="icon" type="image/jpeg" href="/bowen-logo.jpg" />
+        <link rel="shortcut icon" type="image/jpeg" href="/bowen-logo.jpg" />
+        <link rel="apple-touch-icon" href="/bowen-logo.jpg" />
       </head>
       <body className={inter.className}>
         <Navbar />

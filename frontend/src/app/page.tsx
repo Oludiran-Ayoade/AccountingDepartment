@@ -2,15 +2,59 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { BookOpen, Vote, ArrowRight, Bell, ChevronDown } from 'lucide-react';
+import { BookOpen, Vote, ArrowRight, Bell, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import api from '@/lib/api';
+
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+}
 
 export default function HomePage() {
   const [isVisible, setIsVisible] = useState(false);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const [isLoadingAnnouncements, setIsLoadingAnnouncements] = useState(true);
 
   useEffect(() => {
     setIsVisible(true);
+    fetchAnnouncements();
   }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      setIsLoadingAnnouncements(true);
+      const response = await api.get('/announcements');
+      setAnnouncements(response.data || []);
+    } catch (error) {
+      console.error('Failed to fetch announcements:', error);
+      setAnnouncements([]);
+    } finally {
+      setIsLoadingAnnouncements(false);
+    }
+  };
+
+  const nextAnnouncement = () => {
+    setCurrentAnnouncementIndex((prev) => 
+      prev === announcements.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const prevAnnouncement = () => {
+    setCurrentAnnouncementIndex((prev) => 
+      prev === 0 ? announcements.length - 1 : prev - 1
+    );
+  };
+
+  useEffect(() => {
+    if (announcements.length > 1) {
+      const interval = setInterval(nextAnnouncement, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [announcements.length]);
 
   const features = [
     {
@@ -68,12 +112,65 @@ export default function HomePage() {
       {/* Announcement Banner */}
       <section className="py-6 px-4 sm:px-6 lg:px-8 bg-accent/30 border-y border-border">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center space-x-4">
-            <Bell className="w-5 h-5 text-foreground" />
-            <p className="text-sm sm:text-base text-foreground font-light">
-              Class Representative elections are now open — Vote before December 31st
-            </p>
-          </div>
+          {isLoadingAnnouncements ? (
+            <div className="flex items-center justify-center space-x-4">
+              <Bell className="w-5 h-5 text-foreground animate-pulse" />
+              <p className="text-sm sm:text-base text-foreground font-light">Loading announcements...</p>
+            </div>
+          ) : announcements.length === 0 ? (
+            <div className="flex items-center justify-center space-x-4">
+              <Bell className="w-5 h-5 text-muted-foreground" />
+              <p className="text-sm sm:text-base text-muted-foreground font-light">No announcements at this time</p>
+            </div>
+          ) : (
+            <div className="relative flex items-center justify-center">
+              {announcements.length > 1 && (
+                <button
+                  onClick={prevAnnouncement}
+                  className="absolute left-0 p-2 hover:bg-accent/50 rounded-full transition-colors"
+                  aria-label="Previous announcement"
+                >
+                  <ChevronLeft className="w-5 h-5 text-foreground" />
+                </button>
+              )}
+              <div className="flex items-center justify-center space-x-4 px-12">
+                <Bell className="w-5 h-5 text-foreground flex-shrink-0" />
+                <div className="text-center">
+                  <p className="text-sm sm:text-base text-foreground font-semibold mb-1">
+                    {announcements[currentAnnouncementIndex].title}
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-light">
+                    {announcements[currentAnnouncementIndex].content}
+                  </p>
+                </div>
+              </div>
+              {announcements.length > 1 && (
+                <button
+                  onClick={nextAnnouncement}
+                  className="absolute right-0 p-2 hover:bg-accent/50 rounded-full transition-colors"
+                  aria-label="Next announcement"
+                >
+                  <ChevronRight className="w-5 h-5 text-foreground" />
+                </button>
+              )}
+            </div>
+          )}
+          {announcements.length > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-3">
+              {announcements.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentAnnouncementIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentAnnouncementIndex
+                      ? 'bg-foreground w-6'
+                      : 'bg-muted-foreground/40 hover:bg-muted-foreground/60'
+                  }`}
+                  aria-label={`Go to announcement ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -117,7 +214,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto text-center space-y-12">
           <div className="space-y-6">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-foreground tracking-tight">
-              Join Our Community
+           
             </h2>
             <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
               Access comprehensive study materials, participate in democratic elections, and stay connected with your department.

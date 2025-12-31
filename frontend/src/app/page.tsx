@@ -214,7 +214,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto text-center space-y-12">
           <div className="space-y-6">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-foreground tracking-tight">
-           
+           Join Our Community
             </h2>
             <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
               Access comprehensive study materials, participate in democratic elections, and stay connected with your department.
